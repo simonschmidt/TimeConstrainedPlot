@@ -3,9 +3,15 @@ TimeConstrainedPlot
 
 Mathematica package to constrain plot evaluation time.
 
+### Installation
+Download [TimeConstrainedPlot.m](https://github.com/simonschmidt/TimeConstrainedPlot/raw/master/TimeConstrainedPlot.m) and put it in the directory given by `FileNameJoin[{$UserBaseDirectory, "Applications"}]`
+
+
 ### Examples
 
 Plot a slow function:
+
+    <<<TimeConstrainedPlot`
 
     ClearAll[f];
     slowSin[x_]:= slowSin[x] = (Pause[RandomReal[0.1]]; Sin[x])
