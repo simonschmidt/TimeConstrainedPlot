@@ -2,6 +2,8 @@ TimeConstrainedPlot
 ===================
 
 Mathematica package to constrain plot evaluation time.
+As this is based on `EvaluationMonitor :> {x, expr}` it is recommended to use a memoized function
+to avoid double evaluation.
 
 ### Installation
 Download [TimeConstrainedPlot.m](https://github.com/simonschmidt/TimeConstrainedPlot/raw/master/TimeConstrainedPlot.m) and put it in the directory given by `FileNameJoin[{$UserBaseDirectory, "Applications"}]`
