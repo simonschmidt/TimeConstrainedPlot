@@ -72,9 +72,9 @@ LogPlot,LogLinearPlot,LogLogPlot};
 $debug=False;
 Attributes[TimeConstrainedPlot]={HoldFirst};
 TimeConstrainedPlot[_]:=(Message[General::argr,TimeConstrainedPlot,2];False/;False)
-TimeConstrainedPlot[_,t_]/;NonPositive[t]=!=False:=(
+TimeConstrainedPlot[_,t_,___]/;NonPositive[t]=!=False:=(
 Message[General::timc,t];False/;False)
-TimeConstrainedPlot[plotfun_[___],_?Positive]/;FreeQ[validPlotFunctions,plotfun]:=Message[
+TimeConstrainedPlot[plotfun_[___],_?Positive,___]/;FreeQ[validPlotFunctions,plotfun]:=Message[
 TimeConstrainedPlot::upf,plotfun];
 
 TimeConstrainedPlot[
