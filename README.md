@@ -36,7 +36,7 @@ Constrainable plot functions:
 
 - - - 
 
-Preserves function refinement on a per-function basis:
+Preserves sample refinement on a per-function basis:
 
     TimeConstrainedPlot[
     Plot[{Abs[x], Abs[x - 1/2]}, {x, -1, 1}]
