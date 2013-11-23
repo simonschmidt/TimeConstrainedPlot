@@ -168,171 +168,196 @@ Cell[BoxData[
       RowBox[{"Message", "[", 
        RowBox[{
         RowBox[{"General", "::", "timc"}], ",", "t"}], "]"}], ";", 
-      RowBox[{"False", "/;", "False"}]}], ")"}]}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", "\[IndentingNewLine]", 
-   RowBox[{
+      RowBox[{"False", "/;", "False"}]}], ")"}]}], 
+   "\[IndentingNewLine]"}]}]], "Input"],
+
+Cell[TextData[{
+ "Assuming expr is a list ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"{", 
     RowBox[{
-     RowBox[{"TimeConstrainedPlot", "[", "\[IndentingNewLine]", 
+     SubscriptBox["expr", "1"], ",", 
+     SubscriptBox["expr", "2"], ",", "\[Ellipsis]"}], "}"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " for each element a function is created:\n",
+ StyleBox["sowexpr[i, {vars___}] := Last[Sow[{vars, #}, sowtag[i]]];\n", 
+  "Input"],
+ StyleBox["\n", "Code"],
+ "The functions are put into a list:\n",
+ StyleBox["sowing  = sowexpr[#, vars]&/@Range[Length[expr]]\n\n", "Input"],
+ "Which is used instead of the original expression, the Plot is reaped and \
+the reaped values are put into the List version of the original plot \
+function.\n\nThis advantage over using  ",
+ StyleBox["EvaluationMonitor :> Sow[{var, expr}]\n", "Input"],
+ "is that the all functions are not evaluated just because one needs further \
+refinement"
+}], "Text",
+ Background->RGBColor[0.94, 0.91, 0.88]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"TimeConstrainedPlot", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"plotfun_", "[", 
+      RowBox[{"expr_", ",", 
+       RowBox[{"varlist", ":", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"_", ",", "_", ",", "_"}], "}"}], ".."}], ")"}]}], ",", 
+       RowBox[{"Shortest", "[", "opts___", "]"}]}], "]"}], ",", 
+     "\[IndentingNewLine]", " ", 
+     RowBox[{"t_", "?", "Positive"}], ",", "useropts___"}], 
+    "\[IndentingNewLine]", "]"}], "/;", 
+   RowBox[{"MemberQ", "[", 
+    RowBox[{"validPlotFunctions", ",", "plotfun"}], "]"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{"samples", ",", "\[IndentingNewLine]", 
+      RowBox[{"vars", "=", 
+       RowBox[{
+        RowBox[{"{", "varlist", "}"}], "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"listplotfun", "=", 
+       RowBox[{"listPlot", "[", "plotfun", "]"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"extraopts", "=", 
+       RowBox[{"extraPlotOpts", "[", "plotfun", "]"}]}], ",", 
+      "\[IndentingNewLine]", "tcret", ",", "sowtag", ",", "sowexpr", ",", 
+      RowBox[{"nexpr", "=", "0"}], ",", "\[IndentingNewLine]", "sowing"}], 
+     "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Scan", "[", 
       RowBox[{
-       RowBox[{"plotfun_", "[", 
-        RowBox[{"expr_", ",", 
-         RowBox[{"varlist", ":", 
-          RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"nexpr", "++"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"With", "[", 
            RowBox[{
             RowBox[{"{", 
-             RowBox[{"_", ",", "_", ",", "_"}], "}"}], ".."}], ")"}]}], ",", 
-         RowBox[{"Shortest", "[", "opts___", "]"}]}], "]"}], ",", 
-       "\[IndentingNewLine]", " ", 
-       RowBox[{"t_", "?", "Positive"}], ",", "useropts___"}], 
-      "\[IndentingNewLine]", "]"}], "/;", 
-     RowBox[{"MemberQ", "[", 
-      RowBox[{"validPlotFunctions", ",", "plotfun"}], "]"}]}], ":=", 
-    "\[IndentingNewLine]", 
-    RowBox[{"Module", "[", 
-     RowBox[{
-      RowBox[{"{", "\[IndentingNewLine]", 
-       RowBox[{"samples", ",", "\[IndentingNewLine]", 
-        RowBox[{"vars", "=", 
-         RowBox[{
-          RowBox[{"{", "varlist", "}"}], "[", 
-          RowBox[{"[", 
-           RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ",", 
-        "\[IndentingNewLine]", 
-        RowBox[{"listplotfun", "=", 
-         RowBox[{"listPlot", "[", "plotfun", "]"}]}], ",", 
-        "\[IndentingNewLine]", 
-        RowBox[{"extraopts", "=", 
-         RowBox[{"extraPlotOpts", "[", "plotfun", "]"}]}], ",", 
-        "\[IndentingNewLine]", "tcret", ",", "sowtag", ",", "sowexpr", ",", 
-        RowBox[{"nexpr", "=", "0"}], ",", "\[IndentingNewLine]", "sowing"}], 
-       "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", 
-      RowBox[{
-       RowBox[{"Scan", "[", 
-        RowBox[{
-         RowBox[{
-          RowBox[{"(", "\[IndentingNewLine]", 
-           RowBox[{
-            RowBox[{"nexpr", "++"}], ";", "\[IndentingNewLine]", 
-            RowBox[{"With", "[", 
+             RowBox[{"i", "=", "nexpr"}], "}"}], ",", "\[IndentingNewLine]", 
+            RowBox[{
              RowBox[{
-              RowBox[{"{", 
-               RowBox[{"i", "=", "nexpr"}], "}"}], ",", "\[IndentingNewLine]", 
-              RowBox[{
-               RowBox[{
-                RowBox[{"sowexpr", "[", 
-                 RowBox[{"i", ",", 
-                  RowBox[{"{", 
-                   RowBox[{"vars__", "?", "NumericQ"}], "}"}]}], "]"}], ":=", 
-                
-                RowBox[{"Last", "[", 
-                 RowBox[{"Sow", "[", 
-                  RowBox[{
-                   RowBox[{"{", 
-                    RowBox[{"vars", ",", "#"}], "}"}], ",", 
-                   RowBox[{"sowtag", "[", "i", "]"}]}], "]"}], "]"}]}], 
-               ";"}]}], "\[IndentingNewLine]", "]"}], ";"}], ")"}], "&"}], 
-         ",", "\[IndentingNewLine]", 
-         RowBox[{"(*", " ", 
-          RowBox[{"Possible", " ", "to", " ", "avoid", " ", "evaluation", " ", 
-           RowBox[{"here", "?"}]}], " ", "*)"}], "\[IndentingNewLine]", 
-         RowBox[{"If", "[", 
-          RowBox[{
-           RowBox[{"ListQ", "[", "expr", "]"}], ",", "expr", ",", 
-           RowBox[{"{", "expr", "}"}]}], "]"}]}], "]"}], ";", 
-       "\[IndentingNewLine]", 
-       RowBox[{"sowing", "=", 
-        RowBox[{
-         RowBox[{
-          RowBox[{"sowexpr", "[", 
-           RowBox[{"#", ",", "vars"}], "]"}], "&"}], "/@", 
-         RowBox[{"Range", "[", "nexpr", "]"}]}]}], ";", "\[IndentingNewLine]",
-        "\[IndentingNewLine]", 
-       RowBox[{"samples", "=", 
-        RowBox[{"Last", "@", 
-         RowBox[{"Reap", "[", "\[IndentingNewLine]", 
-          RowBox[{
-           RowBox[{
-            RowBox[{"tcret", "=", 
-             RowBox[{"TimeConstrained", "[", "\[IndentingNewLine]", 
-              RowBox[{
-               RowBox[{"plotfun", "[", "\[IndentingNewLine]", 
+              RowBox[{"sowexpr", "[", 
+               RowBox[{"i", ",", 
+                RowBox[{"{", 
+                 RowBox[{"vars__", "?", "NumericQ"}], "}"}]}], "]"}], ":=", 
+              RowBox[{"Last", "[", 
+               RowBox[{"Sow", "[", 
                 RowBox[{
-                "sowing", ",", "varlist", ",", "\[IndentingNewLine]", 
-                 "opts"}], "]"}], "\[IndentingNewLine]", ",", "t", ",", 
-               "$Failed"}], "]"}]}], ";"}], "\[IndentingNewLine]", ",", 
-           RowBox[{"sowtag", "/@", 
-            RowBox[{"Range", "[", "nexpr", "]"}]}]}], "]"}]}]}], ";", 
-       "\[IndentingNewLine]", "\[IndentingNewLine]", 
-       RowBox[{"If", "[", 
-        RowBox[{
-         RowBox[{
-          RowBox[{"Head", "[", "tcret", "]"}], "\[Equal]", "plotfun"}], ",", 
-         RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
-       "\[IndentingNewLine]", 
-       RowBox[{"samples", "=", 
-        RowBox[{"samples", "[", 
-         RowBox[{"[", 
-          RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ";", 
-       "\[IndentingNewLine]", "\[IndentingNewLine]", 
-       RowBox[{"If", "[", 
-        RowBox[{
-         RowBox[{
-          RowBox[{"Length", "[", "vars", "]"}], "\[Equal]", "1"}], ",", 
-         RowBox[{"samples", "=", 
-          RowBox[{"Sort", "/@", "samples"}]}]}], "]"}], ";", 
-       "\[IndentingNewLine]", "\[IndentingNewLine]", 
-       RowBox[{"If", "[", 
-        RowBox[{"$debug", ",", "\[IndentingNewLine]", 
-         RowBox[{
-          RowBox[{"samp", "=", "samples"}], ";", "\[IndentingNewLine]", 
-          RowBox[{"If", "[", 
-           RowBox[{
-            RowBox[{"tcret", "===", "$Failed"}], ",", 
-            RowBox[{"Print", "[", "\"\<Timed out\>\"", "]"}]}], "]"}]}]}], 
-        "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+                 RowBox[{"{", 
+                  RowBox[{"vars", ",", "#"}], "}"}], ",", 
+                 RowBox[{"sowtag", "[", "i", "]"}]}], "]"}], "]"}]}], ";"}]}],
+            "\[IndentingNewLine]", "]"}], ";"}], ")"}], "&"}], ",", 
        "\[IndentingNewLine]", 
        RowBox[{"(*", " ", 
-        RowBox[{"Convert", " ", 
-         RowBox[{"{", 
-          RowBox[{"var", ",", " ", "f"}], "}"}], " ", "to", " ", 
-         "appropritate", " ", "List", "*", "Plot", " ", "form"}], " ", "*)"}],
-        "\[IndentingNewLine]", 
-       RowBox[{"samples", "=", 
-        RowBox[{"Which", "[", "\[IndentingNewLine]", 
+        RowBox[{"Possible", " ", "to", " ", "avoid", " ", "evaluation", " ", 
+         RowBox[{"here", "?"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"ListQ", "[", "expr", "]"}], ",", "expr", ",", 
+         RowBox[{"{", "expr", "}"}]}], "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"sowing", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"sowexpr", "[", 
+         RowBox[{"#", ",", "vars"}], "]"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "nexpr", "]"}]}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"samples", "=", 
+      RowBox[{"Last", "@", 
+       RowBox[{"Reap", "[", "\[IndentingNewLine]", 
+        RowBox[{
          RowBox[{
-          RowBox[{"plotfun", "===", "ParametricPlot"}], ",", 
-          "\[IndentingNewLine]", 
-          RowBox[{"If", "[", 
-           RowBox[{
+          RowBox[{"tcret", "=", 
+           RowBox[{"TimeConstrained", "[", "\[IndentingNewLine]", 
             RowBox[{
-             RowBox[{"Depth", "[", "samples", "]"}], "\[Equal]", "5"}], ",", 
-            "\[IndentingNewLine]", 
-            RowBox[{"samples", "[", 
-             RowBox[{"[", 
-              RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}], ",", 
-            "\[IndentingNewLine]", 
-            RowBox[{
-             RowBox[{
-              RowBox[{"PadLeft", "[", 
-               RowBox[{"samples", ",", "Automatic", ",", "None"}], "]"}], "[", 
-              RowBox[{"[", 
-               RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}], 
-             "\[Transpose]"}]}], "\[IndentingNewLine]", "]"}], ",", 
-          "\[IndentingNewLine]", "\[IndentingNewLine]", "True", ",", 
-          "samples"}], "\[IndentingNewLine]", "]"}]}], ";", 
-       "\[IndentingNewLine]", "\[IndentingNewLine]", 
-       RowBox[{"listplotfun", "[", "\[IndentingNewLine]", 
-        RowBox[{"samples", ",", "\[IndentingNewLine]", 
-         RowBox[{"FilterRules", "[", 
+             RowBox[{"plotfun", "[", "\[IndentingNewLine]", 
+              RowBox[{
+              "sowing", ",", "varlist", ",", "\[IndentingNewLine]", "opts"}], 
+              "]"}], "\[IndentingNewLine]", ",", "t", ",", "$Failed"}], 
+            "]"}]}], ";"}], "\[IndentingNewLine]", ",", 
+         RowBox[{"sowtag", "/@", 
+          RowBox[{"Range", "[", "nexpr", "]"}]}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Head", "[", "tcret", "]"}], "\[Equal]", "plotfun"}], ",", 
+       RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"samples", "=", 
+      RowBox[{"samples", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]",
+      "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "vars", "]"}], "\[Equal]", "1"}], ",", 
+       RowBox[{"samples", "=", 
+        RowBox[{"Sort", "/@", "samples"}]}]}], "]"}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{"$debug", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"samp", "=", "samples"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"tcret", "===", "$Failed"}], ",", 
+          RowBox[{"Print", "[", "\"\<Timed out\>\"", "]"}]}], "]"}]}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Convert", " ", 
+       RowBox[{"{", 
+        RowBox[{"var", ",", " ", "f"}], "}"}], " ", "to", " ", "appropritate",
+        " ", "List", "*", "Plot", " ", "form"}], " ", "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"samples", "=", 
+      RowBox[{"Which", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"plotfun", "===", "ParametricPlot"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
           RowBox[{
-           RowBox[{"Join", "[", 
-            RowBox[{
-             RowBox[{"{", "useropts", "}"}], ",", 
-             RowBox[{"{", "opts", "}"}], ",", "extraopts"}], "]"}], ",", 
-           RowBox[{"Options", "[", "listplotfun", "]"}]}], "]"}]}], 
-        "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
-     "]"}]}]}]}]], "Input"],
+           RowBox[{"Depth", "[", "samples", "]"}], "\[Equal]", "5"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"samples", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"PadLeft", "[", 
+             RowBox[{"samples", ",", "Automatic", ",", "None"}], "]"}], "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}], 
+           "\[Transpose]"}]}], "\[IndentingNewLine]", "]"}], ",", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", "True", ",", 
+        "samples"}], "\[IndentingNewLine]", "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"listplotfun", "[", "\[IndentingNewLine]", 
+      RowBox[{"samples", ",", "\[IndentingNewLine]", 
+       RowBox[{"FilterRules", "[", 
+        RowBox[{
+         RowBox[{"Join", "[", 
+          RowBox[{
+           RowBox[{"{", "useropts", "}"}], ",", 
+           RowBox[{"{", "opts", "}"}], ",", "extraopts"}], "]"}], ",", 
+         RowBox[{"Options", "[", "listplotfun", "]"}]}], "]"}]}], 
+      "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -347,8 +372,6 @@ Cell[BoxData[
   RowBox[{"EndPackage", "[", "]"}], ";"}]], "Code"]
 },
 AutoGeneratedPackage->Automatic,
-WindowSize->{740, 595},
-WindowMargins->{{0, Automatic}, {0, Automatic}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TaggingRules->None,
 TrackCellChangeTimes->False,
