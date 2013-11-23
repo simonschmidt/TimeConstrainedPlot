@@ -128,7 +128,7 @@ True,Flatten/@samples
 
 listplotfun[
 samples,
-FilterRules[Join[useropts,{opts},extraopts],Options[listplotfun]]
+FilterRules[Join[{useropts},{opts},extraopts],Options[listplotfun]]
 ]
 ]
 
