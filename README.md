@@ -51,3 +51,30 @@ With lower `PlotPoints` there is enough time to cover the range and the adaptive
     TimeConstrainedPlot[Plot[slowSin[x], {x, 0, 10}, PlotPoints -> 5], 1]
 
 ![workaround](http://simonschmidt.github.io/TimeConstrainedPlot/images/range-issue-fix.png)
+
+
+- - -
+
+Superfluous evaluation of functions, normally each function is refined individually:
+
+    Clear[f, g];
+    f[x_?NumericQ] := (Sow[x, f]; Abs[x]);
+    g[x_?NumericQ] := (Sow[x, g]; Abs[x - 1/2]);
+    gp = Reap[
+        fp = Reap[
+          Plot[{f[x], g[x]}, {x, -1, 1}]
+          , f][[-1, 1]]
+        , g][[-1, 1]];
+
+
+    ListPlot[{
+      {#, f[#]} & /@ fp,
+      {#, g[#]} & /@ gp}]
+
+![normal eval](http://simonschmidt.github.io/TimeConstrainedPlot/images/normal-eval.png)
+
+As `TimeConstrainedPlot` will evaluate `{x, {f[x], g[x]}` there will be redundant evaluations:
+
+    TimeConstrainedPlot[Plot[{f[x], g[x]}, {x, -1, 1}], Infinity, Joined -> False]
+
+![evalmon](http://simonschmidt.github.io/TimeConstrainedPlot/images/evalmon-eval.png)
