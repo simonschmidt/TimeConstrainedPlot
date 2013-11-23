@@ -30,9 +30,9 @@ for the corresponding `List*Plot` will be kept. To provide more options put them
 
 Constrainable plot functions:
 
-    {ContourPlot, DensityPlot, DiscretePlot, LogLinearPlot, LogLogPlot,
-     LogPlot, ParametricPlot, Plot, Plot3D, PolarPlot, StreamDensityPlot,
-     StreamPlot}
+    {DensityPlot, DiscretePlot,
+     LogLinearPlot, LogLogPlot, LogPlot,
+     ParametricPlot, Plot, Plot3D, PolarPlot}
 
 - - - 
 
