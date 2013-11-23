@@ -34,6 +34,16 @@ Constrainable plot functions:
      LogPlot, ParametricPlot, Plot, Plot3D, PolarPlot, StreamDensityPlot,
      StreamPlot}
 
+- - - 
+
+Preserves function refinement on a per-function basis:
+
+    TimeConstrainedPlot[
+    Plot[{Abs[x], Abs[x - 1/2]}, {x, -1, 1}]
+    , 1, Joined -> False]
+
+![sampling](http://simonschmidt.github.io/TimeConstrainedPlot/images/normal-eval.png)
+
 ### Possible Issues
 
 There might not be enough time to cover the entire plot range:
