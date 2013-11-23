@@ -75,7 +75,7 @@ Message[General::timc,t];False/;False)
 
 
 TimeConstrainedPlot[
-plotfun_[f_,varlist:({_,_,_}..),Shortest[opts___]],
+plotfun_[expr_,varlist:({_,_,_}..),Shortest[opts___]],
  t_?Positive,useropts___
 ]/;MemberQ[validPlotFunctions,plotfun]:=
 Module[{
@@ -89,8 +89,8 @@ tcret,sowtag
 samples=Last@Reap[
 tcret=TimeConstrained[
 plotfun[
-f,varlist,
-EvaluationMonitor:>Sow[{vars,f}, sowtag],
+expr,varlist,
+EvaluationMonitor:>Sow[{vars,expr},sowtag],
 opts]
 ,t,$Failed];
 ,sowtag];
