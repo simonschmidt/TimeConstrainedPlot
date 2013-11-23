@@ -59,3 +59,7 @@ With lower `PlotPoints` there is enough time to cover the range and the adaptive
 
 ![workaround](http://simonschmidt.github.io/TimeConstrainedPlot/images/range-issue-fix.png)
 
+- - - 
+
+Only the refinement is time-constrained, the time to create and display the `List*Plot` is not restricted.
+
