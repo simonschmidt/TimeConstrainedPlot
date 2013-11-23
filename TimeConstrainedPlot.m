@@ -52,16 +52,16 @@ listPlot[DiscretePlot|ParametricPlot]=ListPlot;
 listPlot[plotfun_]:=ToExpression["List"<>SymbolName[plotfun]];
 
 (* Extra opts to emulate original plot functions *)
-extraPlotOpts[Plot|PolarPlot]={Joined->True};
+extraPlotOpts[Plot|PolarPlot|LogPlot|LogLogPlot|LogLinearPlot]={Joined->True};
 extraPlotOpts[ParametricPlot]={Joined->True,AspectRatio->Automatic};
 extraPlotOpts[DiscretePlot]={Filling->Axis};
 extraPlotOpts[_]={};
 
 (* Usable plot functions *)
-validPlotFunctions={ContourPlot,
+validPlotFunctions={(*ContourPlot,*)
 DiscretePlot,DensityPlot,
 ParametricPlot,PolarPlot,Plot,Plot3D,
-StreamDensityPlot,StreamPlot,
+(*StreamDensityPlot,StreamPlot,*)
 LogPlot,LogLinearPlot,LogLogPlot};
 
 
@@ -83,22 +83,31 @@ samples,
 vars={varlist}[[All,1]],
 listplotfun=listPlot[plotfun],
 extraopts=extraPlotOpts[plotfun],
-tcret,sowtag
+tcret,sowtag,sowexpr,nexpr=0,
+sowing
 },
+
+Scan[(
+nexpr++;
+With[{i=nexpr},
+sowexpr[i,{vars__?NumericQ}]:=Last[Sow[{vars,#},sowtag[i]]];
+];)&,
+(* Possible to avoid evaluation here? *)
+If[ListQ[expr],expr,{expr}]];
+sowing=sowexpr[#,vars]&/@Range[nexpr];
 
 samples=Last@Reap[
 tcret=TimeConstrained[
 plotfun[
-expr,varlist,
-EvaluationMonitor:>Sow[{vars,expr},sowtag],
+sowing,varlist,
 opts]
 ,t,$Failed];
-,sowtag];
+,sowtag/@Range[nexpr]];
 
 If[Head[tcret]==plotfun,Return[$Failed]];
-samples=First@samples;
+samples=samples[[All,1]];
 
-If[Length[vars]==1,samples=Sort[samples]];
+If[Length[vars]==1,samples=Sort/@samples];
 
 If[$debug,
 samp=samples;
@@ -108,22 +117,12 @@ If[tcret===$Failed,Print["Timed out"]]
 (* Convert {var, f} to appropritate List*Plot form *)
 samples=Which[
 plotfun===ParametricPlot,
-If[Depth[samples[[All,2]]]==4,
-samples[[All,2]]\[Transpose],
-samples[[All,2]]],
+If[Depth[samples]==5,
+samples[[All,All,2]],
+PadLeft[samples,Automatic,None][[All,All,2]]\[Transpose]
+],
 
-MatchQ[plotfun,StreamDensityPlot|StreamPlot],
-samples,
-
-(* Multiple functions *)
-Depth[samples[[All,2]]]==3,
-MapThread[
-Append,
-{samples[[All,1]],#}
-]&/@(samples[[All,2]]\[Transpose]),
-
-(* One function case *)
-True,Flatten/@samples
+True,samples
 ];
 
 listplotfun[
