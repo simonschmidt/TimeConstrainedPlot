@@ -37,14 +37,11 @@ ClearAll[TimeConstrainedPlot];
 (* :Usage Messages: *)
 
 
-TimeConstrainedPlot::usage="TimeConstrainedPlot[plot, t] Creates plot and stops calculating new ponits after t seconds";
+TimeConstrainedPlot::usage="TimeConstrainedPlot[plot, t] Creates plot and stops calculating new points after t seconds";
 
 
 
 (* :Error Messages: *)
-
-
-TimeConstrainedPlot::upf="Plot function `` is not constrainable";
 
 
 Begin["`Private`"];
@@ -71,11 +68,11 @@ LogPlot,LogLinearPlot,LogLogPlot};
 
 $debug=False;
 Attributes[TimeConstrainedPlot]={HoldFirst};
+
 TimeConstrainedPlot[_]:=(Message[General::argr,TimeConstrainedPlot,2];False/;False)
 TimeConstrainedPlot[_,t_,___]/;NonPositive[t]=!=False:=(
 Message[General::timc,t];False/;False)
-TimeConstrainedPlot[plotfun_[___],_?Positive,___]/;FreeQ[validPlotFunctions,plotfun]:=Message[
-TimeConstrainedPlot::upf,plotfun];
+
 
 TimeConstrainedPlot[
 plotfun_[f_,varlist:({_,_,_}..),Shortest[opts___]],
@@ -83,17 +80,23 @@ plotfun_[f_,varlist:({_,_,_}..),Shortest[opts___]],
 ]/;MemberQ[validPlotFunctions,plotfun]:=
 Module[{
 samples,
-vars=If[Length[{varlist}]==1,varlist[[{1}]],{varlist}[[All,1]]],
+vars={varlist}[[All,1]],
 listplotfun=listPlot[plotfun],
 extraopts=extraPlotOpts[plotfun],
-tcret
+tcret,sowtag
 },
-samples=Reap[
+
+samples=Last@Reap[
 tcret=TimeConstrained[
-plotfun[f,varlist,
-opts,EvaluationMonitor:>Sow[{vars,f}]
-]
-,t,$Failed];][[-1,1]];
+plotfun[
+f,varlist,
+EvaluationMonitor:>Sow[{vars,f}, sowtag],
+opts]
+,t,$Failed];
+,sowtag];
+
+If[Head[tcret]==plotfun,Return[$Failed]];
+samples=First@samples;
 
 If[Length[vars]==1,samples=Sort[samples]];
 
@@ -102,12 +105,10 @@ samp=samples;
 If[tcret===$Failed,Print["Timed out"]]
 ];
 
-If[Head[tcret]==plotfun,Return[$Failed]];
-
 (* Convert {var, f} to appropritate List*Plot form *)
 samples=Which[
 plotfun===ParametricPlot,
-If[Depth[samp[[All,2]]]==4,
+If[Depth[samples[[All,2]]]==4,
 samples[[All,2]]\[Transpose],
 samples[[All,2]]],
 
