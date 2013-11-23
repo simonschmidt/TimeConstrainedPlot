@@ -75,7 +75,7 @@ Message[General::timc,t];False/;False)
 
 
 TimeConstrainedPlot[
-plotfun_[f_,varlist:({_,_,_}..),Shortest[opts___]],
+plotfun_[expr_,varlist:({_,_,_}..),Shortest[opts___]],
  t_?Positive,useropts___
 ]/;MemberQ[validPlotFunctions,plotfun]:=
 Module[{
@@ -83,20 +83,29 @@ samples,
 vars={varlist}[[All,1]],
 listplotfun=listPlot[plotfun],
 extraopts=extraPlotOpts[plotfun],
-tcret,sowtag
+tcret,sowtag,sowingexpr,i
 },
+i=0;
+Scan[(
+i++;
+With[{i=i},
+sowingexpr[i,{vars___?NumericQ}]:=(Sow[{vars,#},sowtag[i]];#)])&
 
+,If[!ListQ[expr],{expr},expr]];
+With[{
+sexpr=
+sowingexpr[#,vars]&/@Range[i]
+},
 samples=Last@Reap[
 tcret=TimeConstrained[
 plotfun[
-f,varlist,
-EvaluationMonitor:>Sow[{vars,f}, sowtag],
+sexpr,varlist,
 opts]
 ,t,$Failed];
-,sowtag];
-
+,sowtag/@Range[i]];
+]
 If[Head[tcret]==plotfun,Return[$Failed]];
-samples=First@samples;
+(*samples=First@samples;*)
 
 If[Length[vars]==1,samples=Sort[samples]];
 
@@ -107,6 +116,7 @@ If[tcret===$Failed,Print["Timed out"]]
 
 (* Convert {var, f} to appropritate List*Plot form *)
 samples=Which[
+True,samples[[All,1]],
 plotfun===ParametricPlot,
 If[Depth[samples[[All,2]]]==4,
 samples[[All,2]]\[Transpose],
