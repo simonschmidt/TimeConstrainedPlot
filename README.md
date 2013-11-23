@@ -73,7 +73,7 @@ Superfluous evaluation of functions, normally each function is refined individua
 
 ![normal eval](http://simonschmidt.github.io/TimeConstrainedPlot/images/normal-eval.png)
 
-As `TimeConstrainedPlot` will evaluate `{x, {f[x], g[x]}` there will be redundant evaluations:
+As `TimeConstrainedPlot` evaluates `{x, {f[x], g[x]}}` there will be redundant evaluations:
 
     TimeConstrainedPlot[Plot[{f[x], g[x]}, {x, -1, 1}], Infinity, Joined -> False]
 
