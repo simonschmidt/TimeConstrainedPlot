@@ -13,8 +13,7 @@ Plot a slow function:
 
     <<<TimeConstrainedPlot`
 
-    ClearAll[slowSin];
-    slowSin[x_] := (Pause[RandomReal[0.1]]; Sin[x])
+    slowSin[x_] := (Pause[RandomReal[0.01]]; Sin[x])
 
     TimeConstrainedPlot[
         Plot3D[slowSin[x] Cos[y], {x, 0, 10}, {y, 0, 10}],
