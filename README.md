@@ -15,7 +15,7 @@ Plot a slow function:
 
     <<<TimeConstrainedPlot`
 
-    ClearAll[f];
+    ClearAll[slowSin];
     slowSin[x_]:= slowSin[x] = (Pause[RandomReal[0.1]]; Sin[x])
 
     TimeConstrainedPlot[
@@ -41,13 +41,13 @@ Constrainable plot functions:
 
 There might not be enough time to cover the entire plot range:
 
-    TimeConstrainedPlot[Plot[f[x], {x, 0, 10}], 1]
+    TimeConstrainedPlot[Plot[slowSin[x], {x, 0, 10}], 1]
 
 ![range issue](http://simonschmidt.github.io/TimeConstrainedPlot/images/range-issue.png)
 
 
 With lower `PlotPoints` there is enough time to cover the range and the adaptive algorithm can start refining:
 
-    TimeConstrainedPlot[Plot[f[x], {x, 0, 10}, PlotPoints -> 5], 1]
+    TimeConstrainedPlot[Plot[slowSin[x], {x, 0, 10}, PlotPoints -> 5], 1]
 
 ![workaround](http://simonschmidt.github.io/TimeConstrainedPlot/images/range-issue-fix.png)
