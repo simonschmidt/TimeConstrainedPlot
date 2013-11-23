@@ -58,18 +58,11 @@ With lower `PlotPoints` there is enough time to cover the range and the adaptive
 Superfluous evaluation of functions, normally each function is refined individually:
 
     Clear[f, g];
-    f[x_?NumericQ] := (Sow[x, f]; Abs[x]);
-    g[x_?NumericQ] := (Sow[x, g]; Abs[x - 1/2]);
-    gp = Reap[
-        fp = Reap[
-          Plot[{f[x], g[x]}, {x, -1, 1}]
-          , f][[-1, 1]]
-        , g][[-1, 1]];
+    f[x_?NumericQ] := Last@Sow[{x, Abs[x]}, f];
+    g[x_?NumericQ] := Last@Sow[{x, Abs[x - 1/2]}, g];
+    {fp, gp} = Reap[Plot[{f[x], g[x]}, {x, -1, 1}], {f, g}][[-1, All, 1]];
 
-
-    ListPlot[{
-      {#, f[#]} & /@ fp,
-      {#, g[#]} & /@ gp}]
+    ListPlot[{fp, gp}]
 
 ![normal eval](http://simonschmidt.github.io/TimeConstrainedPlot/images/normal-eval.png)
 
